@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getPublicPetById } from "../api/petApi";
 import type { Pet } from "../types/Pet";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 function PublicPetPage() {
   const { pid } = useParams();
@@ -18,9 +19,16 @@ function PublicPetPage() {
       if (!pid) return;
 
       try {
-        const data = await getPublicPetById(pid);
+        const response = await fetch(`${API_URL}/pets/public/${pid}`);
+
+        if (!response.ok) {
+          throw new Error("Could not load public pet.");
+        }
+
+        const data: Pet = await response.json();
         setPet(data);
-      } catch {
+      } catch (err) {
+        console.error("Public pet error:", err);
         setError("Could not load emergency pet information.");
       } finally {
         setLoading(false);
@@ -35,13 +43,8 @@ function PublicPetPage() {
 
     const onlyNumbers = phone.replace(/\D/g, "");
 
-    if (onlyNumbers.startsWith("51")) {
-      return onlyNumbers;
-    }
-
-    if (onlyNumbers.length === 9) {
-      return `51${onlyNumbers}`;
-    }
+    if (onlyNumbers.startsWith("51")) return onlyNumbers;
+    if (onlyNumbers.length === 9) return `51${onlyNumbers}`;
 
     return onlyNumbers;
   };
@@ -52,9 +55,7 @@ function PublicPetPage() {
     const phoneNumber = cleanPhoneNumber(pet.emergencyContact);
 
     if (!phoneNumber) {
-      setLocationError(
-        "This pet does not have an emergency contact available."
-      );
+      setLocationError("This pet does not have an emergency contact available.");
       return;
     }
 
@@ -73,7 +74,6 @@ function PublicPetPage() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-
         const mapsLink = `https://maps.google.com/?q=${latitude},${longitude}`;
 
         const message = encodeURIComponent(
@@ -81,7 +81,6 @@ function PublicPetPage() {
         );
 
         window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
-
         setLoadingLocation(false);
       },
       () => {
@@ -159,12 +158,7 @@ function PublicPetPage() {
             Emergency Pet Profile
           </p>
 
-          <h1
-            style={{
-              margin: "12px 0 0",
-              fontSize: "36px",
-            }}
-          >
+          <h1 style={{ margin: "12px 0 0", fontSize: "36px" }}>
             Hello, I&apos;m {pet.name}
           </h1>
 
@@ -175,8 +169,7 @@ function PublicPetPage() {
               lineHeight: 1.6,
             }}
           >
-            If you found me, please contact my family using the information
-            below.
+            If you found me, please contact my family using the information below.
           </p>
         </div>
 
@@ -217,8 +210,8 @@ function PublicPetPage() {
           )}
 
           <p style={{ color: "#64748b", marginTop: 0, lineHeight: 1.6 }}>
-            This public page contains essential information to help return this
-            pet safely. Please use the emergency contact only for pet recovery.
+            This public page contains essential information to help return this pet
+            safely. Please use the emergency contact only for pet recovery.
           </p>
 
           <div className="pets-list" aria-label="Emergency pet information">
@@ -248,19 +241,12 @@ function PublicPetPage() {
             </div>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gap: "12px",
-              marginTop: "22px",
-            }}
-          >
+          <div style={{ display: "grid", gap: "12px", marginTop: "22px" }}>
             <button
               className="primary-button"
               type="button"
               onClick={handleFoundPet}
               disabled={loadingLocation}
-              aria-label={`Share location with ${pet.name}'s emergency contact`}
             >
               {loadingLocation ? "Preparing location..." : "I Found This Pet"}
             </button>
@@ -269,7 +255,6 @@ function PublicPetPage() {
               <a
                 className="secondary-button"
                 href={`tel:${emergencyPhone}`}
-                aria-label={`Call emergency contact ${emergencyPhone}`}
                 style={{
                   display: "block",
                   textAlign: "center",
@@ -282,11 +267,7 @@ function PublicPetPage() {
           </div>
 
           {locationError && (
-            <div
-              className="error-message"
-              role="alert"
-              style={{ marginTop: "18px" }}
-            >
+            <div className="error-message" role="alert" style={{ marginTop: "18px" }}>
               {locationError}
             </div>
           )}
