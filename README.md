@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🐾 UriPet Web
 
 Frontend web de **UriPet**, una plataforma para la gestión de mascotas desarrollada para el curso **Desarrollo Basado en Plataformas (DBP)**.
