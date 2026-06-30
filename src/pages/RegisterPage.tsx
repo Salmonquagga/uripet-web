@@ -81,7 +81,7 @@ function RegisterPage() {
         <input
           id="name"
           type="text"
-          placeholder="Adriana Matumay"
+          placeholder="Name"
           value={name}
           onChange={(event) => setName(event.target.value)}
         />
@@ -96,7 +96,7 @@ function RegisterPage() {
         <input
           id="email"
           type="email"
-          placeholder="adriana@gmail.com"
+          placeholder="user@gmail.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
