@@ -5,7 +5,11 @@
       "destination": "http://18.227.99.143:8080/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/public/pets/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
