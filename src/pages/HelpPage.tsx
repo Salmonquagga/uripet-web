@@ -5,7 +5,7 @@ function HelpPage() {
     <div className="app-layout">
       <Sidebar />
 
-      <main className="dashboard">
+      <main className="bolt-main dashboard">
         <p className="eyebrow">Support Center</p>
 
         <h1>Help & Support</h1>

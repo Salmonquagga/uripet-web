@@ -11,7 +11,7 @@ function SettingsPage() {
     <div className="app-layout">
       <Sidebar />
 
-      <main className="dashboard">
+      <main className="bolt-main dashboard">
         <p className="eyebrow">Account preferences</p>
 
         <h1>Settings</h1>
