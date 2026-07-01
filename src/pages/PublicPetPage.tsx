@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { getPublicPetById } from "../api/petApi";
 import type { Pet } from "../types/Pet";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 function PublicPetPage() {
   const { pid } = useParams();
@@ -19,13 +18,10 @@ function PublicPetPage() {
       if (!pid) return;
 
       try {
-        const response = await fetch(`${API_URL}/pets/public/${pid}`);
+        setLoading(true);
+        setError("");
 
-        if (!response.ok) {
-          throw new Error("Could not load public pet.");
-        }
-
-        const data: Pet = await response.json();
+        const data = await getPublicPetById(pid);
         setPet(data);
       } catch (err) {
         console.error("Public pet error:", err);
