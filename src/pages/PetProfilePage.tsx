@@ -68,7 +68,7 @@ function PetProfilePage() {
       <div className="app-layout">
         <Sidebar />
 
-        <main className="dashboard">
+        <main className="bolt-main dashboard">
           <nav
             aria-label="Breadcrumb"
             style={{
@@ -109,7 +109,7 @@ function PetProfilePage() {
       <div className="app-layout">
         <Sidebar />
 
-        <main className="dashboard">
+        <main className="bolt-main dashboard">
           <nav
             aria-label="Breadcrumb"
             style={{
@@ -154,7 +154,7 @@ function PetProfilePage() {
         <div className="app-layout">
       <Sidebar />
 
-      <main className="dashboard">
+      <main className="bolt-main dashboard">
         <nav
           aria-label="Breadcrumb"
           style={{
