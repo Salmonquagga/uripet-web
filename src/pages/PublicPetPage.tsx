@@ -15,7 +15,11 @@ function PublicPetPage() {
 
   useEffect(() => {
     const loadPet = async () => {
-      if (!pid) return;
+      if (!pid) {
+        setError("Emergency pet information could not be found.");
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
@@ -102,8 +106,8 @@ function PublicPetPage() {
 
   if (loading) {
     return (
-      <div className="auth-page">
-        <div className="auth-card" style={{ textAlign: "center" }}>
+      <div className="public-pet-page">
+        <div className="public-pet-card public-pet-status-card">
           <p aria-live="polite">Loading emergency information...</p>
         </div>
       </div>
@@ -112,9 +116,9 @@ function PublicPetPage() {
 
   if (error || !pet) {
     return (
-      <div className="auth-page">
-        <div className="auth-card">
-          <div className="error-message" role="alert">
+      <div className="public-pet-page">
+        <div className="public-pet-card public-pet-status-card">
+          <div className="public-pet-error" role="alert">
             {error || "Emergency pet information could not be found."}
           </div>
         </div>
@@ -123,123 +127,54 @@ function PublicPetPage() {
   }
 
   const emergencyPhone = pet.emergencyContact?.trim();
+  const mainImage = pet.imagesUrl?.[0];
 
   return (
-    <div className="auth-page">
-      <div
-        className="auth-card"
-        style={{
-          width: "100%",
-          maxWidth: "540px",
-          padding: "0",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            background: "linear-gradient(135deg, #22c55e, #16a34a)",
-            color: "white",
-            padding: "30px",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontWeight: 800,
-              letterSpacing: "1px",
-              textTransform: "uppercase",
-              fontSize: "12px",
-            }}
-          >
-            Emergency Pet Profile
-          </p>
-
-          <h1 style={{ margin: "12px 0 0", fontSize: "36px" }}>
-            Hello, I&apos;m {pet.name}
-          </h1>
-
-          <p
-            style={{
-              margin: "12px 0 0",
-              color: "rgba(255,255,255,0.92)",
-              lineHeight: 1.6,
-            }}
-          >
+    <div className="public-pet-page">
+      <main className="public-pet-card">
+        <section className="public-pet-hero">
+          <p className="public-pet-eyebrow">Emergency Pet Profile</p>
+          <h1>Hello, I&apos;m {pet.name}</h1>
+          <p>
             If you found me, please contact my family using the information below.
           </p>
-        </div>
+        </section>
 
-        <div style={{ padding: "28px" }}>
-          {pet.imagesUrl?.length > 0 ? (
+        <section className="public-pet-body">
+          {mainImage ? (
             <img
-              src={pet.imagesUrl[0]}
+              src={mainImage}
               alt={`Profile photo of ${pet.name}`}
-              style={{
-                width: "110px",
-                height: "110px",
-                borderRadius: "28px",
-                objectFit: "cover",
-                border: "1px solid #dce8e2",
-                marginBottom: "18px",
-              }}
+              className="public-pet-image"
             />
           ) : (
             <div
+              className="public-pet-placeholder"
               role="img"
               aria-label={`${pet.name} profile placeholder`}
-              style={{
-                width: "110px",
-                height: "110px",
-                borderRadius: "28px",
-                background: "#dcfce7",
-                color: "#16a34a",
-                fontSize: "42px",
-                fontWeight: 800,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: "18px",
-              }}
             >
               {pet.name.charAt(0).toUpperCase()}
             </div>
           )}
 
-          <p style={{ color: "#64748b", marginTop: 0, lineHeight: 1.6 }}>
+          <p className="public-pet-description">
             This public page contains essential information to help return this pet
             safely. Please use the emergency contact only for pet recovery.
           </p>
 
-          <div className="pets-list" aria-label="Emergency pet information">
-            <div className="pet-row">
-              <strong>Pet ID</strong>
-              <span>{pet.pid}</span>
-            </div>
-
-            <div className="pet-row">
-              <strong>Species</strong>
-              <span>{pet.species || "-"}</span>
-            </div>
-
-            <div className="pet-row">
-              <strong>Breed</strong>
-              <span>{pet.breed || "-"}</span>
-            </div>
-
-            <div className="pet-row">
-              <strong>Color</strong>
-              <span>{pet.color || "-"}</span>
-            </div>
-
-            <div className="pet-row">
-              <strong>Emergency Contact</strong>
-              <span>{emergencyPhone || "-"}</span>
-            </div>
+          <div className="public-pet-info-grid" aria-label="Emergency pet information">
+            <InfoCard label="Pet ID" value={pet.pid} />
+            <InfoCard label="Species" value={pet.species || "-"} />
+            <InfoCard label="Breed" value={pet.breed || "-"} />
+            <InfoCard label="Color" value={pet.color || "-"} />
+            <InfoCard label="Weight" value={pet.weight ? `${pet.weight} kg` : "-"} />
+            <InfoCard label="Birth Date" value={pet.birthDate || "-"} />
+            <InfoCard label="Emergency Contact" value={emergencyPhone || "-"} full />
           </div>
 
-          <div style={{ display: "grid", gap: "12px", marginTop: "22px" }}>
+          <div className="public-pet-actions">
             <button
-              className="primary-button"
+              className="public-pet-primary-button"
               type="button"
               onClick={handleFoundPet}
               disabled={loadingLocation}
@@ -248,39 +183,41 @@ function PublicPetPage() {
             </button>
 
             {emergencyPhone && (
-              <a
-                className="secondary-button"
-                href={`tel:${emergencyPhone}`}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  textDecoration: "none",
-                }}
-              >
+              <a className="public-pet-secondary-button" href={`tel:${emergencyPhone}`}>
                 Call Emergency Contact
               </a>
             )}
           </div>
 
           {locationError && (
-            <div className="error-message" role="alert" style={{ marginTop: "18px" }}>
+            <div className="public-pet-error" role="alert">
               {locationError}
             </div>
           )}
 
-          <p
-            style={{
-              color: "#64748b",
-              fontSize: "13px",
-              marginTop: "20px",
-              lineHeight: 1.5,
-            }}
-          >
+          <p className="public-pet-note">
             Location sharing only happens after pressing the button and granting
             browser permission.
           </p>
-        </div>
-      </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+function InfoCard({
+  label,
+  value,
+  full = false,
+}: {
+  label: string;
+  value: string;
+  full?: boolean;
+}) {
+  return (
+    <div className={full ? "public-pet-info-card full" : "public-pet-info-card"}>
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }

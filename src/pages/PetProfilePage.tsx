@@ -332,7 +332,7 @@ function PetProfilePage() {
 
               <button
                 className="secondary-button"
-                onClick={() => navigate(`/public/pets/${pet.pid}`)}
+                onClick={() => window.open(`/public/pets/${pet.pid}`, "_blank")}
               >
                 Open Public Profile
               </button>
