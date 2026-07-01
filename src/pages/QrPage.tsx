@@ -135,7 +135,7 @@ function QrPage() {
     );
   }
 
-  const publicUrl = `${window.location.origin}/public/pets/${pet.pid}`;
+  const publicUrl = `https://uripet-web.vercel.app/public/pets/${pet.pid}`;
 
   const copyPublicUrl = async () => {
     try {
