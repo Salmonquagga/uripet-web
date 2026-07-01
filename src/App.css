@@ -2583,3 +2583,32 @@ body {
     margin-left: 0;
   }
 }
+.bolt-app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.bolt-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 255px;
+  height: 100vh;
+  z-index: 100;
+}
+
+.bolt-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: 255px;
+}
+
+@media (max-width: 850px) {
+  .bolt-sidebar {
+    display: none;
+  }
+
+  .bolt-main {
+    margin-left: 0;
+  }
+}
